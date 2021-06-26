@@ -7,9 +7,13 @@ import { RoomCode } from '../components/RoomCode';
 import { useAuth } from '../hooks/useAuth';
 import { database } from '../services/firebase';
 
-import { useRoom } from '../hooks/useRoom'
+import { useRoom2 } from '../hooks/useRoom'
+
+
 
 import '../styles/room.scss';
+// import '../styles/question-hidden.scss';
+
 
 
 
@@ -24,7 +28,7 @@ export function Room() {
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
     const roomId = params.id;
-    const {title, questions} = useRoom(roomId);
+    const {title, questions} = useRoom2(roomId);
 
 
 
@@ -48,7 +52,8 @@ export function Room() {
                 avatar: user.avatar,
             },
             isHighlighted: false,
-            isAnswered: false
+            isAnswered: false,
+            isAproved: false
 
         }
 
@@ -107,12 +112,14 @@ export function Room() {
                 <div className="question-list">
                     {questions.map(question => {
                         return (
+                           
                             <Question
-                                key={question.id}
-                                content={question.content}
-                                author={question.author}
-                                isAnswered={question.isAnswered}
-                                isHighlighted={question.isHighlighted}
+                            key={question.id}
+                            content={question.content}
+                            author={question.author}
+                            isAnswered={question.isAnswered}
+                            isHighlighted={question.isHighlighted}
+                            isAproved={question.isAproved}
                             > 
                                 {!question.isAnswered && (
                                     <button className={`like-button ${question.likeId? 'liked' : ''}`} type="button" aria-label="Marcar como gostei">
@@ -122,7 +129,8 @@ export function Room() {
                                         </svg>
                                     </button>
                                 )}
-                            </Question>
+                            </Question>    
+                            
                         );
                     })}
                 </div>

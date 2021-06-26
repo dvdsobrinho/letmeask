@@ -44,6 +44,12 @@ export function AdminRoom() {
         })
     }
     
+    async function handleCheckQuestionAsAproved(questionId: string) {
+        await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+            isAproved: true,
+        })
+    }
+    
     async function handleHighlightQuestion(questionId: string) {
         await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
             isHighlighted: true,
@@ -79,8 +85,19 @@ export function AdminRoom() {
                                 author={question.author}
                                 isAnswered={question.isAnswered}
                                 isHighlighted={question.isHighlighted}
+                                isAproved={question.isAproved}
                             >
-                                {!question.isAnswered && (
+
+                                {!question.isAproved && (
+                                    <>
+                                    <button type="button" className="aprove-button"
+                                        onClick={() => handleCheckQuestionAsAproved(question.id)}
+                                    >
+                                        <img src={checkImg} alt="Aceitar Pergunta" />
+                                    </button>
+                                    </>
+                                )}
+                                {!question.isAnswered && question.isAproved && (
                                     <>
                                     <button type="button"
                                     onClick={() => handleCheckQuestionAsAnswered(question.id)}
